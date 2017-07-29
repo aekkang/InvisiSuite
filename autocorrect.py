@@ -28,13 +28,13 @@ def edit_distance(word1, word2):
     for let2 in range(len(word2)+1):
         for let1 in range(len(word1)+1):
             if let2==0:
-                dp[let2][let1] = let1*2
+                dp[let2][let1] = let1*2.0
             elif let1==0:
-                dp[let2][let1] = let2*2
+                dp[let2][let1] = let2*2.0
             elif word1[let1-1]==word2[let2-1]:
                 dp[let2][let1] = dp[let2-1][let1-1]
             else:
-                dp[let2][let1] = min(dp[let2-1][let1] + 2, dp[let2][let1-1] + 2, dp[let2-1][let1-1] + mistype(word1[let1-1], word2[let2-1]))
+                dp[let2][let1] = min(dp[let2-1][let1] + 1.2, dp[let2][let1-1] + 1.2, dp[let2-1][let1-1] + mistype(word1[let1-1], word2[let2-1]))
     print(dp[len(word2)][len(word1)])
 
 def mistype(str1, str2):
