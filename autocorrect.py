@@ -22,14 +22,18 @@ def autocorrect(word):
 
 
 def edit_distance(word1, word2):
-	dp = [[0]*len(word1)]*len(word2)
-	for let2 in range(len(word2)):
-		for let1 in range(len(word1)):
-			if word1[let1]==word2[let2]:
+	dp = [[0 for x in range(len(word1)+1)] for x in range(len(word2)+1)]
+	for let2 in range(len(word2)+1):
+		for let1 in range(len(word1)+1):
+			if let2==0:
+				dp[let2][let1] = let1
+			elif let1==0:
+				dp[let2][let1] = let2
+			elif word1[let1-1]==word2[let2-1]:
 				dp[let2][let1] = dp[let2-1][let1-1]
 			else:
-				dp[let2][let1] = min(dp[let2-1][let1] + 1, dp[let2][let1-1] + 1, dpl[let2-1][let1-1] + 1)
-	return dp[len(word2)-1][len(word1)-1]
+				dp[let2][let1] = min(dp[let2-1][let1] + 1, dp[let2][let1-1] + 1, dp[let2-1][let1-1] + 1)
+	print(dp[len(word2)][len(word1)])
 
 
 if __name__ == '__main__':
