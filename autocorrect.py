@@ -2,70 +2,72 @@ import enchant
 import nltk
 import unicodedata
 import bayes
-
 from nltk import FreqDist
 from nltk.corpus import brown
 from nltk.corpus import twitter_samples
 from enchant.tokenize import get_tokenizer
 
 
-
-
-
-
-#Initializes the frequency distribution for nltk.corpus.brown
+"""
+Initializes the frequency distribution for nltk.corpus.brown
+"""
 def initialize():
-    #freq_dict = import_freq_list()
-    return (FreqDist(i.lower() for i in brown.words()), FreqDist(i.lower() for dank in twitter_samples.strings() for i in unicodedata.normalize('NFKD', dank).encode('ascii','ignore')), bayes.import_bayes())
+    print 'Initializing...'
 
+    # Get frequency list of brown
+    print 'Getting frequency distribution of nltk.corpus.brown...'
+    brown_list = [word.lower() for word in brown.words()]
+    brown_freq_dist = FreqDist(brown_list)
+    print 'Done with nltk.corpus.brown.'
 
+    # Get frequency list of twitter
+    print 'Getting frequency distribution of nltk.corpus.twitter_samples...'
+    twitter_list = [uword.lower() for word in twitter_samples.strings() for uword in unicodedata.normalize('NFKD', word).encode('ascii','ignore')]
+    twitter_freq_dist = FreqDist(twitter_list)
+    print 'Done with nltk.corpus.twitter_samples.'
 
+    # Get bayes
+    print 'Getting best words from bayes...'
+    best_bayes = bayes.import_bayes()
+    print 'Done with bayes.'
 
-#Modify later to read stream and run autocorrect
+    return brown_freq_dist, twitter_freq_dist, best_bayes
+
 def tester():
-    litty = initialize()
-    freq_list = litty[0]
-    freq_list2 = litty[1] 
-    bayes_dict = litty[2]
-
+    # Initialize lists
+    freq_list, freq_list2, bayes_dict = initialize()
     testing_set = [('raning','raining'), ('rainning', 'raining'), ('writtings', 'writings'), ('loking', 'looking'), ('imature', 'immature'), ('haning', 'hanging'), ('furr', 'fur'), ('sxold', 'scold'), ('bacin', 'bacon'), ('thunder', 'thounder'), ('saled', 'sailed'), ('saild', 'sailed'), ('heroe', 'hero'), ('reporter', 'repoter'), ('heer', 'here')]
     cor = 0.0
     tot = 0.0
+    print 'Done initializing.'
+
     for tup in testing_set:
-        if tup[1] in autocorrect(freq_list, freq_list, bayes_dict, "", tup[0]):
+        result = autocorrect(freq_list, freq_list, bayes_dict, "", tup[0])
+        print tup[1] , ':' , result
+        if tup[1] in result:
             cor += 1
         tot += 1
+
     print(cor/tot)
 
-
-
-
-#Modification of tester method that handles streams
+"""
+Modified tester method that handles streams
+"""
 def streamer():
-
-    print('Initializing...')
-
+    # Initialize the two frequency lists
+    freq_list, freq_list2, bayes_dict = initialize()
     pwl = enchant.request_pwl_dict("enchant_pwl.txt")
+    curr, prev = "", ""
+    print 'Done initalizing.'
 
-    #Initialize the two frequency lists
-    litty = initialize()
-    freq_list = litty[0]
-    freq_list2 = litty[1] 
-    bayes_dict = litty[2]
-
-    curr = ""
-    prev = ""
-
-
-    while(True):
-        letty = raw_input('Letter?  ')
-        if letty == ' ' or letty == '':
+    while True:
+        letter = raw_input('Letter?  ')
+        if letter in (' ', ''):
             print(autocorrect(freq_list, freq_list2, bayes_dict, prev, curr))
             prev = curr
             curr = ""
-
         else:
-            curr += letty
+            curr += letter
 
 
 
@@ -77,11 +79,10 @@ def autocorrect(freq_list, freq_list2, bayes_dict, prev, word):
     for i in xrange(len(words)):
         words[i] = words[i].lower()
 
-
     if word not in words:
         words.append(word)
 
-    scores = list()
+    scores = []
 
 
     for wordle in words:
@@ -112,6 +113,7 @@ def autocorrect(freq_list, freq_list2, bayes_dict, prev, word):
     scores = sorted(scores, key=lambda x: x[1])
 
     answer = scores[len(scores)-1][0]
+    return scores
     return answer
 
 
@@ -150,7 +152,8 @@ def mistype(str1, str2):
 if __name__ == '__main__':
     #autocorrect(raw_input('Input a string: '))
     #edit_distance(raw_input('Input a string: '), raw_input('Input a string: '))
-    streamer()
+    tester()
+    #streamer()
 
 
 
