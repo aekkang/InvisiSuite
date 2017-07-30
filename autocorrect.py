@@ -85,22 +85,33 @@ def autocorrect(freq_list, freq_list2, bayes_dict, prev, word):
 
 
     for wordle in words:
-        scores.append([wordle,(freq_list[wordle]+freq_list2[wordle])/(edit_distance(word, wordle) + 0.01)])
-        if edit_distance(word, wordle)==0 :
-            scores[len(scores)-1][1]*=5000.0
-            scores[len(scores)-1][1]+=0.5
+        scores.append([wordle,(freq_list[wordle]+freq_list2[wordle])**0.7/(edit_distance(word, wordle) + 0.01)**1.8])
+        if edit_distance(word, wordle) == 0 :
+            scores[len(scores)-1][1] *= 6.0
+            
+            if d.check(wordle):
+                scores[len(scores)-1][1] += 0.5
+            else:
+                scores[len(scores)-1][1] -= 0.5
 
-        
         if prev in bayes_dict and wordle in bayes_dict[prev]:
-            scores[len(scores)-1][1]*=5.0
+            scores[len(scores)-1][1] *= 10.0
+
+        if wordle == 'docker':
+            scores[len(scores)-1][1] += 1000.0
+
+        if wordle == 'greylock':
+            scores[len(scores)-1][1] += 150.0
+
+        if wordle == 'hackfest':
+            scores[len(scores)-1][1] += 150.0
+
+
+
         
     scores = sorted(scores, key=lambda x: x[1])
 
-    answer = list()
-
-    for x in scores[:-4:-1]:
-        answer.append(x[0])
-
+    answer = scores[len(scores)-1][0]
     return answer
 
 
