@@ -57,12 +57,13 @@ def rengfunc(prev_key, hosts=["172.20.10.4"], visual=True):
         stream = urllib2.urlopen(hoststr)
         streams.append(stream)
 
-        print('Streaming {}'.format(hoststr))
+        # print('Streaming {}'.format(hoststr))
 
     ### Parameters.
     init = False
     cooldown = 0
     jerked = 0
+    prev_jerked = 0
     rolling_base_lengths = [[] for _ in range(N_FINGERS)]
     rolling_base_widths = [[] for _ in range(N_FINGERS)]
     streamstr_lst = [''] * N_STREAMS
@@ -70,8 +71,8 @@ def rengfunc(prev_key, hosts=["172.20.10.4"], visual=True):
     clicked = False
     word = ''
 
-    print("Calibrating...")
-    time.sleep(2)
+    # print("Calibrating...")
+    # time.sleep(2)
 
     while True:
         ### Read streams.
@@ -205,7 +206,6 @@ def rengfunc(prev_key, hosts=["172.20.10.4"], visual=True):
                 # print(prev_key)
                 for key, value in FINGER2LETTER.iteritems():
                     if value == prev_key:
-                        print(key)
                         prev_jerked = int(key[0])
                         break
                 jerked = np.argmax(deltas)
@@ -231,7 +231,7 @@ def rengfunc(prev_key, hosts=["172.20.10.4"], visual=True):
 
                 cooldown = 6
                 # print jerked, offset, str(float(finger_lengths[jerked]) / base_lengths[jerked])
-                jerk_ratio = str(float(finger_lengths[jerked]) / base_lengths[jerked]
+                jerk_ratio = str(float(finger_lengths[jerked]) / base_lengths[jerked])
                 F2Li = '{},{}'.format(jerked, offset)
                 if F2Li in FINGER2LETTER:
                     letter = FINGER2LETTER[F2Li]
@@ -240,7 +240,7 @@ def rengfunc(prev_key, hosts=["172.20.10.4"], visual=True):
                     #     word = ''
                     # else:
                     #     word += letter
-                    return letter, jerk_ratio
+                    return letter#, jerk_ratio
 
 
 if __name__ == "__main__":
