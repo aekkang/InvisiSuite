@@ -13,10 +13,11 @@ def main():
         curr += key_in
         keyboard.release(key_in)
         if key_in == ' ':
+            curr = curr[:-1]
             for _ in xrange(count + 1):
                 keyboard.press(Key.backspace)
                 keyboard.release(Key.backspace)
-            corrected_word = #### AUTOCORRECT BS #### autocorrect(curr[:-1])
+            corrected_word = ac.autocorrect(freq_list, freq_list_2, best_bayes, prev, curr)
             keyboard.type(corrected_word + ' ')
             count = 0
             prev = curr
