@@ -6,7 +6,7 @@ def main():
     count = 0
     prev = ''
     curr = ''
-    prev_key = ''
+    prev_key = ' '
     'Done initializing.'
     
     while True:
