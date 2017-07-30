@@ -1,38 +1,42 @@
 import enchant
 import nltk
+import unicodedata
+
 from nltk import FreqDist
 from nltk.corpus import brown
 from nltk.corpus import twitter_samples
-
 from enchant.tokenize import get_tokenizer
 
 
 
-
+#Initializes the frequency distribution for nltk.corpus.brown
 def initialize():
     #freq_dict = import_freq_list()
-    return FreqDist(i for i in brown.words())
+    return (FreqDist(i for i in brown.words()), FreqDist(i for dank in twitter_samples.strings() for i in unicodedata.normalize('NFKD', dank).encode('ascii','ignore')))
 
-
+#Modify later to read stream and run autocorrect
 def tester():
-    freq_list = initialize() 
+    litty = initialize()
+    freq_list = litty[0]
+    freq_list2 = litty[1] 
+
     testing_set = [('raning','raining'), ('rainning', 'raining'), ('writtings', 'writings'), ('loking', 'looking'), ('imature', 'immature'), ('haning', 'hanging'), ('furr', 'fur'), ('sxold', 'scold'), ('bacin', 'bacon'), ('thunder', 'thounder'), ('saled', 'sailed'), ('saild', 'sailed'), ('heroe', 'hero'), ('reporter', 'repoter'), ('heer', 'here')]
     cor = 0.0
     tot = 0.0
     for tup in testing_set:
-        if tup[1] in autocorrect(freq_list, tup[0]):
+        if tup[1] in autocorrect(freq_list, freq_list, tup[0]):
             cor += 1
         tot += 1
     print(cor/tot)
 
 
 
-def autocorrect(freq_list, word):
+def autocorrect(freq_list, freq_list2, word):
     with open('big.txt', 'r') as f:
         st = get_tokenizer("en_US")
 
         
-        #freq_list2 = FreqDist(i for dank in twitter_samples.strings('tweets.20150430-223406.json') for i in dank.split())
+        
 
     d = enchant.Dict("en_US")
     words = d.suggest(word)
@@ -40,7 +44,7 @@ def autocorrect(freq_list, word):
     scores = list()
 
     for wordle in words:
-        scores.append((wordle,(freq_list[wordle])/(edit_distance(word, wordle) + 1)))
+        scores.append((wordle,(freq_list[wordle]+freq_list2[wordle]*50.0)/(edit_distance(word, wordle) + 1)))
 
     scores = sorted(scores, key=lambda x: x[1])
 
