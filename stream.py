@@ -44,7 +44,7 @@ FINGER2LETTER = {
 }
 
 
-def rengfunc(hosts=["172.20.10.4"], visual=True):
+def rengfunc(prev_key, hosts=["172.20.10.4"], visual=True):
     assert len(hosts) == N_STREAMS
 
     ### Start streams.
@@ -201,7 +201,13 @@ def rengfunc(hosts=["172.20.10.4"], visual=True):
             clicked = any([d > 8 for d in deltas])
             stable = np.sum([d < 3 for d in deltas]) >= 9
             if clicked:
-                prev_jerked = jerked
+                # prev_jerked = jerked
+                # print(prev_key)
+                for key, value in FINGER2LETTER.iteritems():
+                    if value == prev_key:
+                        print(key)
+                        prev_jerked = int(key[0])
+                        break
                 jerked = np.argmax(deltas)
 
                 # Cooldown cases.
@@ -223,7 +229,7 @@ def rengfunc(hosts=["172.20.10.4"], visual=True):
                     if math.fabs(finger_widths[jerked] - base_widths[jerked]) > 6:
                         offset += 3
 
-                cooldown = 10
+                cooldown = 6
                 # print jerked, offset, str(float(finger_lengths[jerked]) / base_lengths[jerked])
                 F2Li = '{},{}'.format(jerked, offset)
                 if F2Li in FINGER2LETTER:
