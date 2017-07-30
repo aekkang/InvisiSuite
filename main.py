@@ -1,4 +1,5 @@
 import autocorrect as ac
+import stream
 
 def main():
     freq_list, freq_list_2, best_bayes = ac.initialize()
@@ -8,7 +9,7 @@ def main():
     'Done initializing.'
     
     while True:
-        key_in = rengfunc()
+        key_in = stream.rengfunc()
         keyboard.press(key_in)
         curr += key_in
         keyboard.release(key_in)
