@@ -107,7 +107,7 @@ def autocorrect(freq_list, freq_list2, bayes_dict, prev, word):
         if wordle == 'hackfest':
             scores[len(scores)-1][1] += 150.0
 
-        if wordle == 'InvisiBoard':
+        if wordle == 'invisiboard':
             scores[len(scores)-1][1] += 250.0
 
 
