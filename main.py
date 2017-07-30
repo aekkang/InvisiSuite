@@ -7,7 +7,7 @@ def main():
     prev = ''
     curr = ''
     prev_key = ' '
-    'Done initializing.'
+    print 'Done initializing.'
     
     while True:
         key_in = stream.rengfunc(prev_key)
