@@ -113,7 +113,6 @@ def autocorrect(freq_list, freq_list2, bayes_dict, prev, word):
     scores = sorted(scores, key=lambda x: x[1])
 
     answer = scores[len(scores)-1][0]
-    return scores
     return answer
 
 
@@ -160,8 +159,8 @@ def mistype(str1, str2):
 if __name__ == '__main__':
     #autocorrect(raw_input('Input a string: '))
     #edit_distance(raw_input('Input a string: '), raw_input('Input a string: '))
-    tester()
-    #streamer()
+    #tester()
+    streamer()
 
 
 
