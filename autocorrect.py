@@ -98,7 +98,7 @@ def autocorrect(freq_list, freq_list2, bayes_dict, prev, word):
             scores[len(scores)-1][1] *= 10.0
 
         if wordle == 'docker':
-            scores[len(scores)-1][1] += 1000.0
+            scores[len(scores)-1][1] += 800.0
 
         if wordle == 'greylock':
             scores[len(scores)-1][1] += 150.0
@@ -139,13 +139,21 @@ def edit_distance(word1, word2):
 
 
 def mistype(str1, str2):
+    answer = 0
     assoc = [['q','z'], ['v', 'n', 'g', 'h'], ['x', 'd', 'f', 'v'], ['e', 's', 'w', 'r', 'f', 'c', 'x'], ['w', 's', 'd', 'f', 'r'], ['d', 'e', 'r', 't', 'g', 'v', 'c'], ['f', 't', 'h' ,'v', 'b'], ['g', 't', 'y', 'u', 'j', 'n', 'b'], ['u', 'j', 'k', 'l', 'o'], ['u', 'y', 'h', 'n', 'm', 'k'], ['j', 'm', 'u', 'i', 'l', 'o'], ['k', 'i', 'o', 'p', 'm'], ['n', 'j','k', 'l'], ['b', 'h', 'j', 'k', 'm'], ['i', 'k', 'l', 'p'], ['o', 'l'], ['w', 's', 'a'], ['e', 'd', 'f', 'g', 't'], ['q', 'a', 'z', 'x', 'd', 'c', 'e', 'w'], ['r', 'f', 'g', 'h', 'y'], ['y', 'h', 'j', 'k', 'i'], ['c', 'f' ,'g','b'], ['q', 'a', 's', 'd', 'e'], ['z', 'a', 's', 'd', 'c'], ['t', 'g', 'h', 'j', 'u'], ['a','s','x']]
     str1 = str1.lower()
     str2 = str2.lower()
     if str2 in assoc[ord(str1) - 97]:
-        return 1
+        answer = 1
     else:
-        return 2
+        answer = 2
+    if str1 in ['a', 'q', 'w', 's', 'z', 'x'] or str2 in ['a', 'q', 'z', 'x', 's', 'w']:
+        answer -= 0.5
+
+    return answer
+
+
+    
 
 if __name__ == '__main__':
     #autocorrect(raw_input('Input a string: '))
