@@ -6,10 +6,12 @@ def main():
     count = 0
     prev = ''
     curr = ''
+    prev_key = ''
     'Done initializing.'
     
     while True:
-        key_in = stream.rengfunc()
+        key_in = stream.rengfunc(prev_key)
+        prev_key = key_in
         keyboard.press(key_in)
         curr += key_in
         keyboard.release(key_in)
