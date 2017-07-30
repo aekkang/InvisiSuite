@@ -225,6 +225,7 @@ def rengfunc(hosts=["172.20.10.4"], visual=True):
 
                 cooldown = 10
                 # print jerked, offset, str(float(finger_lengths[jerked]) / base_lengths[jerked])
+                jerk_ratio = str(float(finger_lengths[jerked]) / base_lengths[jerked]
                 F2Li = '{},{}'.format(jerked, offset)
                 if F2Li in FINGER2LETTER:
                     letter = FINGER2LETTER[F2Li]
@@ -233,7 +234,7 @@ def rengfunc(hosts=["172.20.10.4"], visual=True):
                     #     word = ''
                     # else:
                     #     word += letter
-                    print letter
+                    return letter, jerk_ratio
 
 
 if __name__ == "__main__":
